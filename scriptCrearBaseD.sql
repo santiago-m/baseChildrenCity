@@ -58,3 +58,24 @@ CREATE TABLE `MAntecedente_Salud`(
     `antecedentes` VARCHAR(30),
     CONSTRAINT `ant` FOREIGN KEY (`nro_hist`) REFERENCES `Historia_Clinica`(`nro_hist`)
 )ENGINE InnoDB;
+
+CREATE TABLE `Episodio_Salud`(
+	`nro_item` INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `nro_hist` INTEGER NOT NULL AUTO_INCREMENT,
+    `descripcion` VARCHAR(50), 
+    `fecha` DATE,
+     CONSTRAINT `histc` FOREIGN KEY (`nro_hist`) REFERENCES `Historia_Clinica`(`nro_hist`)
+)ENGINE InnoDB;
+
+CREATE TABLE `Medicamento`(
+	`nombre_med` VARCHAR(15) PRIMARY KEY NOT NULL
+)
+ENGINE InnoDB;
+
+CREATE TABLE `Recetado`(
+	`nombre_med` VARCHAR(15) PRIMARY KEY NOT NULL,
+    `nro_item` INTEGER NOT NULL AUTO_INCREMENT,
+    CONSTRAINT `rec` FOREIGN KEY (`nro_item`) REFERENCES `Episodio_Salud`(`nro_item`),
+    CONSTRAINT `rec2` FOREIGN KEY (`nombre_med`) REFERENCES `Medicamento`(`nombre_med`)
+)
+ENGINE InnoDB;
