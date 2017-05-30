@@ -1,0 +1,35 @@
+Tutorial basico git
+
+	1) Clonar un repositorio.- Vale cualquiera de las dos formas
+	  $ git clone https://github.com/<nombreUsuario>/<NombreRepositorio>.git
+	  						Ó
+	  $ git clone git@github.com:<nombreUsuario>/<NombreRepositorio>.git
+
+	  EJEMPLO: 
+	  	git clone https://github.com/santiago-m/baseChildrenCity.git
+	  	git clone git@github.com:santiago-m:baseChildrenCity.git
+
+
+	----> Luego de clonar, tenemos una copia local del repositorio <----
+
+	2) Actualizar copia local.- Traer cambios realizados a los archivos del repositorio
+		$ git pull
+
+
+	----> Hay que hacer esto antes de pushear cualquier cosa (actualizar repositorio remoto), y preferentemente antes de siquiera modificar cualquier archivo <----
+
+	3) Actualizar repositorio remoto (Subir cambios realizados)
+		$ git add <nombre del archivo que quiere subir / actualizar en github>
+		$ git commit -m "Mensaje"
+		$ git push origin master
+
+		explicacion:
+			a) git add selecciona el o los archivos que se planea hacer commit y luego subir.-
+			
+			b) git commit confirma los cambios realizados a los archivos (aquellos que se agregaron via git add)
+				prepara los archivos para ser subidos / actualizados y el mensaje especifica el mensaje que aparecerá en github y que identifica el commit
+
+			c) git push origin master actualiza el repositorio remoto con el commit realizado (Solo sube los archivos a los cuales se les hizo add y commit)
+
+			d) Para hacer diferentes commit, hay que realizar los 3 pasos las veces que sean necesarias.
+
