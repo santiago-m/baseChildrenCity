@@ -79,8 +79,10 @@ CREATE TABLE `Visita` (
 
 DROP TABLE IF EXISTS `a_cargo`;
 CREATE TABLE `a_cargo`(
-	`nro_casa` INTEGER NOT NULL,
+    `nro_casa` INTEGER NOT NULL,
     `nro_doc` INTEGER NOT NULL,
+    `h_inicio` TIME,
+    `h_fin` TIME,
     CONSTRAINT `doc` FOREIGN KEY (`nro_doc`) REFERENCES `Personal`(`nro_doc`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `casa` FOREIGN KEY (`nro_casa`) REFERENCES `Casa`(`nro_casa`) ON DELETE CASCADE ON UPDATE CASCADE,
     PRIMARY KEY (`nro_casa`, `nro_doc`)
@@ -89,12 +91,12 @@ CREATE TABLE `a_cargo`(
 
 DROP TABLE IF EXISTS `Ocasion`;
 CREATE TABLE `Ocasion`(
-	`nro_casa` INTEGER NOT NULL,
+    `nro_casa` INTEGER NOT NULL,
     `nro_doc` INTEGER NOT NULL,
     `fecha` DATE,
     PRIMARY KEY (`nro_casa`, `nro_doc`, `fecha`),
-	CONSTRAINT `doc_Ocasion` FOREIGN KEY (`nro_doc`) REFERENCES `Personal`(`nro_doc`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `casa_Ocasion` FOREIGN KEY (`nro_casa`) REFERENCES `Casa`(`nro_casa`) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT `doc_Ocasion` FOREIGN KEY (`nro_doc`) REFERENCES `a_cargo`(`nro_doc`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `casa_Ocasion` FOREIGN KEY (`nro_casa`) REFERENCES `a_cargo`(`nro_casa`) ON DELETE CASCADE ON UPDATE CASCADE
 )ENGINE InnoDB;
 
 
@@ -108,8 +110,9 @@ CREATE TABLE `Historia_Clinica`(
 
 DROP TABLE IF EXISTS `MAntecedente_Salud`;
 CREATE TABLE `MAntecedente_Salud`(
-	`nro_hist` INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`nro_hist` INTEGER NOT NULL,
     `antecedentes` VARCHAR(30),
+    PRIMARY KEY (`nro_hist`, `antecedentes`),
     CONSTRAINT `ant` FOREIGN KEY (`nro_hist`) REFERENCES `Historia_Clinica`(`nro_hist`) ON DELETE CASCADE ON UPDATE CASCADE
 )ENGINE InnoDB;
 
@@ -132,9 +135,10 @@ CREATE TABLE `Medicamento`(
 
 DROP TABLE IF EXISTS `Recetado`;
 CREATE TABLE `Recetado`(
-	`nombre_med` VARCHAR(15) PRIMARY KEY NOT NULL,
+	`nombre_med` VARCHAR(15) NOT NULL,
     `nro_item` INTEGER NOT NULL AUTO_INCREMENT,
     `dosis`	VARCHAR(20),
+    PRIMARY KEY (`nombre_med`, `nro_item`),
     CONSTRAINT `rec` FOREIGN KEY (`nro_item`) REFERENCES `Episodio_Salud`(`nro_item`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `rec2` FOREIGN KEY (`nombre_med`) REFERENCES `Medicamento`(`nombre_med`) ON DELETE CASCADE ON UPDATE CASCADE
 )ENGINE InnoDB;
