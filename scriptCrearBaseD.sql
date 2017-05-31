@@ -1,5 +1,6 @@
 CREATE DATABASE IF NOT EXISTS  ChildrenCity;
 USE ChildrenCity;
+
 DROP TABLE IF EXISTS `Menor`;
 CREATE TABLE `Menor` (
     `nro_doc` INTEGER NOT NULL PRIMARY KEY,
@@ -47,6 +48,21 @@ CREATE TABLE `Casa`(
 	`nro_casa` INTEGER NOT NULL PRIMARY KEY
 )ENGINE InnoDB;
 
+CREATE TABLE `a_cargo`(
+	`nro_casa` INTEGER NOT NULL PRIMARY KEY,
+    `nro_doc` INTEGER NOT NULL PRIMARY KEY,
+    CONSTRAINT `doc` FOREIGN KEY (`nro_doc`) REFERENCES `Personal`(`nro_doc`),
+    CONSTRAINT `casa` FOREIGN KEY (`nro_casa`) REFERENCES `Casa`(`nro_casa`)
+)ENGINE InnoDB;
+
+CREATE TABLE `ocasion`(
+	`nro_casa` INTEGER NOT NULL PRIMARY KEY,
+    `nro_doc` INTEGER NOT NULL PRIMARY KEY,
+    `fecha` DATE PRIMARY KEY,
+	CONSTRAINT `doc` FOREIGN KEY (`nro_doc`) REFERENCES `Personal`(`nro_doc`),
+    CONSTRAINT `casa` FOREIGN KEY (`nro_casa`) REFERENCES `Casa`(`nro_casa`)
+)ENGINE InnoDB;
+
 CREATE TABLE `Historia_Clinica`(
 	`nro_hist` INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `nro_doc` INTEGER NOT NULL,
@@ -75,7 +91,17 @@ ENGINE InnoDB;
 CREATE TABLE `Recetado`(
 	`nombre_med` VARCHAR(15) PRIMARY KEY NOT NULL,
     `nro_item` INTEGER NOT NULL AUTO_INCREMENT,
+    `dosis`	VARCHAR(20),
     CONSTRAINT `rec` FOREIGN KEY (`nro_item`) REFERENCES `Episodio_Salud`(`nro_item`),
     CONSTRAINT `rec2` FOREIGN KEY (`nombre_med`) REFERENCES `Medicamento`(`nombre_med`)
+)
+ENGINE InnoDB;
+
+CREATE TABLE `Legajo`(
+	`nro_legajo` INTEGER PRIMARY KEY NOT NULL,
+    `visita_familiar` VARCHAR(30),
+    `foto_dni` VARCHAR(30),
+    `part_nac` VARCHAR(30),
+    `otros_hogares` VARCHAR(30)
 )
 ENGINE InnoDB;
