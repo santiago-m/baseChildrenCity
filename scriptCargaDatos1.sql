@@ -4,6 +4,7 @@ INSERT INTO `Casa` (`nro_casa`) VALUES
     (NULL), (NULL), (NULL), (NULL), (NULL), (NULL), (NULL), (NULL), (NULL), (NULL);
 
 INSERT INTO `Medicamento` (`nombre_med`) VALUES
+	('none'),
  	('Diclofenac'),
  	('Ibuprofeno'),
  	('Amoxicilina'),
@@ -55,5 +56,64 @@ INSERT INTO `Menor` (`nro_doc`, `tipo_doc`, `apellido`, `nombre`, `estado`, `con
  	(45439524, 34213567, '2017-07-23 11:09:30'),
  	(53877633, 35123571, '2016-05-15 16:35:50'),
  	(45439524, 32567124, '2017-04-14 18:45:43');
- 
- 
+
+ INSERT INTO `a_cargo` (`nro_casa`, `nro_doc`, `h_inicio`, `h_fin`) VALUES
+ 	(1, 23654124, '10:00:00', '22:30:00'),
+ 	(2, 15234622, '10:00:00', '23:30:00'),
+ 	(5, 23654124, '09:00:00', '00:30:00'),
+ 	(7, 25367124, '08:00:00', '22:30:00'),
+ 	(9, 14257236, '08:00:00', '21:30:00'),
+ 	(6, 17286192, '09:00:00', '22:00:00'),
+ 	(8, 15234622, '14:00:00', '21:30:00'),
+ 	(4, 23654124, '12:00:00', '20:30:00'),
+ 	(10, 17286192, '14:00:00', '23:00:00'),
+ 	(3, 23654124, '14:00:00', '23:30:00');
+
+
+INSERT INTO `Ocasion` (`nro_casa`, `nro_doc`, `fecha`) VALUES
+	(1, 23654124, '2017-05-21'),
+	(2, 15234622, '2017-03-25'),
+	(5, 23654124, '2017-01-05'),
+	(7, 25367124, '2017-08-07'),
+	(9, 14257236, '2017-01-13'),
+	(6, 17286192, '2017-06-14'),
+	(8, 15234622, '2017-03-08'),
+	(4, 23654124, '2017-12-15'),
+	(10, 17286192, '2017-09-23'),
+	(3, 23654124,'2017-09-25');
+
+INSERT INTO `Historia_Clinica` (`nro_doc`) VALUES
+	(50417693),
+	(58217553),
+	(53877633),
+	(45439524),
+	(60222510);
+
+INSERT INTO `MAntecedente_Salud` (`nro_hist`, `antecedentes`) VALUES
+	(1, 'InserteAquiAntecedentes'),
+	(2, 'InserteAquiAntecedentes'),
+	(3, 'InserteAquiAntecedentes'),
+	(4, 'InserteAquiAntecedentes'),
+	(5, 'InserteAquiAntecedentes');
+
+INSERT INTO `Episodio_Salud` (`nro_hist`, `descripcion`, `fecha`) VALUES
+	(1, 'Varicela', '2014-05-13'),
+	(1, 'Migraña', '2016-12-11'),
+	(1, 'Hipo', '2016-01-02'),
+	(2, 'Varicela', '2011-03-10'),
+	(3, 'Varicela', '2015-02-21'),
+	(3, 'Gripe', '2016-07-04'),
+	(4, 'Varicela', '2016-03-11'),
+	(5, 'Varicela', '2015-08-30'),
+	(5, 'DolorDeGarganta', '2016-12-15');
+	
+INSERT INTO `Recetado` (`nombre_med`, `nro_item`, `dosis`) VALUES
+	('none', 1, 'none'),
+	('none', 4, 'none'),
+	('none', 5, 'none'),
+	('none', 7, 'none'),
+	('none', 8, 'none'),
+	('Paracetamol', 2, '500gm c/8hs'),
+	('none', 3, 'none'),
+	('Amoxicilina', 6, '1 c/12hs'),
+	('Ibuprofeno', 9, '500gm c/8hs');
