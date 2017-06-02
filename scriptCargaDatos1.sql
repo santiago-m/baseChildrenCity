@@ -3,6 +3,9 @@ USE ChildrenCity;
 INSERT INTO `Casa` (`nro_casa`) VALUES
     (NULL), (NULL), (NULL), (NULL), (NULL), (NULL), (NULL), (NULL), (NULL), (NULL);
 
+INSERT INTO `Historia_Clinica` (`nro_hist`) VALUES
+	(null),	(null), (null), (null), (null);
+
 INSERT INTO `Medicamento` (`nombre_med`) VALUES
 	('none'),
  	('Diclofenac'),
@@ -18,12 +21,12 @@ INSERT INTO `Legajo` (`nro_legajo`, `visita_familiar`, `foto_dni`, `part_nac`, `
 	(103, 1, 'http://imagenes.com/dniJose', 'http://imagenes.com/part_nacJose', 'http://imagenes.com/listadoHogaresJose'),
 	(104, 0, 'http://imagenes.com/dniPaula', 'http://imagenes.com/part_nacPaula', 'http://imagenes.com/listadoHogaresPaula');
 
-INSERT INTO `Menor` (`nro_doc`, `tipo_doc`, `apellido`, `nombre`, `estado`, `condicion`, `fecha_nac`, `peso`, `talla`, `telefono`, `nro_casa`, `nro_legajo`) VALUES
-	(50417693, 'DNI', 'Grosso', 'Jose', 'ingresado', 'permanente', '2005-07-13', 50, 'S', 3584555443, 7, 102),
-	(58217553, 'DNI', 'Rodriguez', 'Rogelio', 'ingresado', 'dia', '2006-08-08', 45, 'XS', 3586212534, 5, 104),
-	(53877633, 'DNI', 'Tobaldo', 'Roberto', 'egresado', 'dia', '2008-10-20', 53, 'M', 3585563412, 4, 101),
-	(45439524, 'DNI', 'Gimenez', 'Francisco', 'egresado', 'permanente', '2005-03-21', 60, 'L', 3584887324, 7, 100),
-	(60222510, 'DNI', 'Menendez', 'Paula', 'ingresado', 'dia', '2000-01-11', 61, 'L', 3584223652, 2, 103);
+INSERT INTO `Menor` (`nro_doc`, `tipo_doc`, `apellido`, `nombre`, `estado`, `condicion`, `fecha_nac`, `peso`, `talla`, `telefono`, `nro_casa`, `nro_legajo`, `nro_hist`) VALUES
+	(50417693, 'DNI', 'Grosso', 'Jose', 'ingresado', 'permanente', '2005-07-13', 50, 'S', 3584555443, 7, 102, 1),
+	(58217553, 'DNI', 'Rodriguez', 'Rogelio', 'ingresado', 'dia', '2006-08-08', 45, 'XS', 3586212534, 5, 104, 2),
+	(53877633, 'DNI', 'Tobaldo', 'Roberto', 'egresado', 'dia', '2008-10-20', 53, 'M', 3585563412, 4, 101, 3),
+	(45439524, 'DNI', 'Gimenez', 'Francisco', 'egresado', 'permanente', '2005-03-21', 60, 'L', 3584887324, 7, 100, 4),
+	(60222510, 'DNI', 'Menendez', 'Paula', 'ingresado', 'dia', '2000-01-11', 61, 'L', 3584223652, 2, 103, 5);
  
  INSERT INTO `Visitante` (`nro_doc`, `tipo_doc`, `apellido`, `nombre`) VALUES 
  	(34213567,'DNI','Fenoglio','Marcelo'),
@@ -48,46 +51,26 @@ INSERT INTO `Menor` (`nro_doc`, `tipo_doc`, `apellido`, `nombre`, `estado`, `con
  	(14257236, 3586652237),
  	(14257236, 3585559892);
 
- INSERT INTO `Visita` (`nro_doc_menor`, `nro_doc_visitante`, `dia_hora`) VALUES
- 	(53877633, 34213567, '2017-05-17 19:35:40'),
- 	(45439524, 37643138, '2016-02-11 16:40:19'),
- 	(60222510, 34247175, '2017-03-25 10:05:15'),
- 	(60222510, 32567124, '2016-07-23 10:13:04'),
- 	(45439524, 34213567, '2017-07-23 11:09:30'),
- 	(53877633, 35123571, '2016-05-15 16:35:50'),
- 	(45439524, 32567124, '2017-04-14 18:45:43');
+ INSERT INTO `Visita` (`nro_doc_menor`, `nro_doc_visitante`, `fecha`, `hora_llegada`, `hora_salida`) VALUES
+ 	(53877633, 34213567, '2017-05-17', '19:35:40', '20:35:40'),
+ 	(45439524, 37643138, '2016-02-11', '16:40:19', '17:20:00'),
+ 	(60222510, 34247175, '2017-03-25', '10:05:15', '11:00:00'),
+ 	(60222510, 32567124, '2016-07-23', '10:13:04', '12:00:00'),
+ 	(45439524, 34213567, '2017-07-23', '11:09:30', '12:00:00'),
+ 	(53877633, 35123571, '2016-05-15', '16:35:50', '17:15:05'),
+ 	(45439524, 32567124, '2017-04-14', '18:45:43', '19:30:30');
 
- INSERT INTO `a_cargo` (`nro_casa`, `nro_doc`, `h_inicio`, `h_fin`) VALUES
- 	(1, 23654124, '10:00:00', '22:30:00'),
- 	(2, 15234622, '10:00:00', '23:30:00'),
- 	(5, 23654124, '09:00:00', '00:30:00'),
- 	(7, 25367124, '08:00:00', '22:30:00'),
- 	(9, 14257236, '08:00:00', '21:30:00'),
- 	(6, 17286192, '09:00:00', '22:00:00'),
- 	(8, 15234622, '14:00:00', '21:30:00'),
- 	(4, 23654124, '12:00:00', '20:30:00'),
- 	(10, 17286192, '14:00:00', '23:00:00'),
- 	(3, 23654124, '14:00:00', '23:30:00');
-
-
-INSERT INTO `Ocasion` (`nro_casa`, `nro_doc`, `fecha`) VALUES
-	(1, 23654124, '2017-05-21'),
-	(2, 15234622, '2017-03-25'),
-	(5, 23654124, '2017-01-05'),
-	(7, 25367124, '2017-08-07'),
-	(9, 14257236, '2017-01-13'),
-	(6, 17286192, '2017-06-14'),
-	(8, 15234622, '2017-03-08'),
-	(4, 23654124, '2017-12-15'),
-	(10, 17286192, '2017-09-23'),
-	(3, 23654124,'2017-09-25');
-
-INSERT INTO `Historia_Clinica` (`nro_doc`) VALUES
-	(50417693),
-	(58217553),
-	(53877633),
-	(45439524),
-	(60222510);
+ INSERT INTO `a_cargo` (`nro_casa`, `nro_doc`, `fecha`, `h_inicio`, `h_fin`) VALUES
+ 	(1, 23654124, '2017-04-17',  '10:00:00', '22:30:00'),
+ 	(2, 15234622, '2017-05-18',  '10:00:00', '23:30:00'),
+ 	(5, 23654124, '2017-05-19',  '09:00:00', '00:30:00'),
+ 	(7, 25367124, '2017-05-20',  '08:00:00', '22:30:00'),
+ 	(9, 14257236, '2017-05-21',  '08:00:00', '21:30:00'),
+ 	(6, 17286192, '2017-03-30',  '09:00:00', '22:00:00'),
+ 	(8, 15234622, '2017-04-18',  '14:00:00', '21:30:00'),
+ 	(4, 23654124, '2017-04-19',  '12:00:00', '20:30:00'),
+ 	(10, 17286192, '2017-04-29', '14:00:00', '23:00:00'),
+ 	(3, 23654124, '2017-06-01',  '14:00:00', '23:30:00');
 
 INSERT INTO `MAntecedente_Salud` (`nro_hist`, `antecedentes`) VALUES
 	(1, 'InserteAquiAntecedentes'),
@@ -107,13 +90,13 @@ INSERT INTO `Episodio_Salud` (`nro_hist`, `descripcion`, `fecha`) VALUES
 	(5, 'Varicela', '2015-08-30'),
 	(5, 'DolorDeGarganta', '2016-12-15');
 	
-INSERT INTO `Recetado` (`nombre_med`, `nro_item`, `dosis`) VALUES
-	('none', 1, 'none'),
-	('none', 4, 'none'),
-	('none', 5, 'none'),
-	('none', 7, 'none'),
-	('none', 8, 'none'),
-	('Paracetamol', 2, '500gm c/8hs'),
-	('none', 3, 'none'),
-	('Amoxicilina', 6, '1 c/12hs'),
-	('Ibuprofeno', 9, '500gm c/8hs');
+INSERT INTO `Receta` (`nro_medicamento`, `nro_episodio`, `dosis`) VALUES
+	(1, 1, 'none'),
+	(1, 4, 'none'),
+	(1, 5, 'none'),
+	(1, 7, 'none'),
+	(1, 8, 'none'),
+	(5, 2, '500gm c/8hs'),
+	(1, 3, 'none'),
+	(4, 6, '1 c/12hs'),
+	(3, 9, '500gm c/8hs');

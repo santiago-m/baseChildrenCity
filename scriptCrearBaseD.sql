@@ -13,7 +13,13 @@ CREATE TABLE `Legajo`(
     `visita_familiar` BIT,
     `foto_dni` VARCHAR(60),
     `part_nac` VARCHAR(60),
-    `otros_hogares` VARCHAR(60)
+    `otros_hogares` VARCHAR(60) /*Informes escaneados de otros hogares. URL*/
+)ENGINE InnoDB;
+
+
+DROP TABLE IF EXISTS `Historia_Clinica`;
+CREATE TABLE `Historia_Clinica`(
+	`nro_hist` INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT
 )ENGINE InnoDB;
 
 
@@ -32,8 +38,10 @@ CREATE TABLE `Menor` (
     `telefono` BIGINT,
     `nro_casa` INTEGER,
 	`nro_legajo` INTEGER,
+	`nro_hist` INTEGER NOT NULL,
     CONSTRAINT `casaMenor` FOREIGN KEY (`nro_casa`) REFERENCES `Casa`(`nro_casa`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `leg` FOREIGN KEY (`nro_legajo`) REFERENCES `Legajo`(`nro_legajo`) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT `leg` FOREIGN KEY (`nro_legajo`) REFERENCES `Legajo`(`nro_legajo`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `hClinica` FOREIGN KEY (`nro_hist`) REFERENCES `Historia_Clinica`(`nro_hist`) ON DELETE CASCADE ON UPDATE CASCADE
 )ENGINE InnoDB;
 
 
@@ -67,11 +75,12 @@ CREATE TABLE `Visitante` (
 
 DROP TABLE IF EXISTS `Visita`;
 CREATE TABLE `Visita` (
+	`nro_visita` INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `nro_doc_menor` INTEGER NOT NULL,
     `nro_doc_visitante` INTEGER NOT NULL,
-    `nro_visita` INTEGER,
-    `dia_hora` DATETIME,
-    PRIMARY KEY (`nro_doc_menor`, `nro_doc_visitante`),
+    `fecha` DATE,
+    `hora_llegada` TIME,
+    `hora_salida` TIME,
     CONSTRAINT `doc_menor` FOREIGN KEY (`nro_doc_menor`) REFERENCES `Menor`(`nro_doc`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `doc_visitante` FOREIGN KEY (`nro_doc_visitante`) REFERENCES `Visitante`(`nro_doc`) ON DELETE CASCADE ON UPDATE CASCADE
 )ENGINE InnoDB;
@@ -81,30 +90,12 @@ DROP TABLE IF EXISTS `a_cargo`;
 CREATE TABLE `a_cargo`(
     `nro_casa` INTEGER NOT NULL,
     `nro_doc` INTEGER NOT NULL,
+    `fecha` DATE,
     `h_inicio` TIME,
     `h_fin` TIME,
     CONSTRAINT `doc` FOREIGN KEY (`nro_doc`) REFERENCES `Personal`(`nro_doc`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `casa` FOREIGN KEY (`nro_casa`) REFERENCES `Casa`(`nro_casa`) ON DELETE CASCADE ON UPDATE CASCADE,
     PRIMARY KEY (`nro_casa`, `nro_doc`)
-)ENGINE InnoDB;
-
-
-DROP TABLE IF EXISTS `Ocasion`;
-CREATE TABLE `Ocasion`(
-    `nro_casa` INTEGER NOT NULL,
-    `nro_doc` INTEGER NOT NULL,
-    `fecha` DATE,
-    PRIMARY KEY (`nro_casa`, `nro_doc`, `fecha`),
-    CONSTRAINT `doc_Ocasion` FOREIGN KEY (`nro_doc`) REFERENCES `a_cargo`(`nro_doc`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `casa_Ocasion` FOREIGN KEY (`nro_casa`) REFERENCES `a_cargo`(`nro_casa`) ON DELETE CASCADE ON UPDATE CASCADE
-)ENGINE InnoDB;
-
-
-DROP TABLE IF EXISTS `Historia_Clinica`;
-CREATE TABLE `Historia_Clinica`(
-	`nro_hist` INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `nro_doc` INTEGER NOT NULL,
-    CONSTRAINT `dc` FOREIGN KEY (`nro_doc`) REFERENCES `Menor`(`nro_doc`) ON DELETE CASCADE ON UPDATE CASCADE
 )ENGINE InnoDB;
 
 
@@ -119,7 +110,7 @@ CREATE TABLE `MAntecedente_Salud`(
 
 DROP TABLE IF EXISTS `Episodio_Salud`;
 CREATE TABLE `Episodio_Salud`(
-	`nro_item` INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`nro_episodio` INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `nro_hist` INTEGER NOT NULL,
     `descripcion` VARCHAR(50),
     `fecha` DATE,
@@ -129,18 +120,19 @@ CREATE TABLE `Episodio_Salud`(
 
 DROP TABLE IF EXISTS `Medicamento`;
 CREATE TABLE `Medicamento`(
-	`nombre_med` VARCHAR(15) PRIMARY KEY NOT NULL
+	`nro_medicamento` INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`nombre_med` VARCHAR(15)
 )ENGINE InnoDB;
 
 
-DROP TABLE IF EXISTS `Recetado`;
-CREATE TABLE `Recetado`(
-	`nombre_med` VARCHAR(15) NOT NULL,
-    `nro_item` INTEGER NOT NULL AUTO_INCREMENT,
+DROP TABLE IF EXISTS `Receta`;
+CREATE TABLE `Receta`(
+	`nro_medicamento` INTEGER NOT NULL,
+    `nro_episodio` INTEGER NOT NULL,
     `dosis`	VARCHAR(20),
-    PRIMARY KEY (`nombre_med`, `nro_item`),
-    CONSTRAINT `rec` FOREIGN KEY (`nro_item`) REFERENCES `Episodio_Salud`(`nro_item`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `rec2` FOREIGN KEY (`nombre_med`) REFERENCES `Medicamento`(`nombre_med`) ON DELETE CASCADE ON UPDATE CASCADE
+    PRIMARY KEY (`nro_medicamento`, `nro_episodio`),
+    CONSTRAINT `rec` FOREIGN KEY (`nro_episodio`) REFERENCES `Episodio_Salud`(`nro_episodio`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `rec2` FOREIGN KEY (`nro_medicamento`) REFERENCES `Medicamento`(`nro_medicamento`) ON DELETE CASCADE ON UPDATE CASCADE
 )ENGINE InnoDB;
 
 
@@ -149,7 +141,7 @@ DELIMITER //
 CREATE TRIGGER trig_edad BEFORE INSERT ON `Menor`
 FOR EACH ROW
 BEGIN
-    SET NEW.`edad` = edad(NEW.`fecha_nac`, curdate());
+    SET NEW.`edad` = `edad`(NEW.`fecha_nac`, curdate());
 END
 //
 
@@ -157,14 +149,6 @@ CREATE TRIGGER trig_edadUpd8 BEFORE UPDATE ON `Menor`
 FOR EACH ROW
 BEGIN
     SET NEW.`edad` = `edad`(NEW.`fecha_nac`, curdate());
-END
-//
-
-CREATE TRIGGER trig_numVisita BEFORE INSERT ON `Visita`
-FOR EACH ROW
-BEGIN
-    select count(`Visita`.`nro_doc_visitante`) INTO @cantRegistros FROM Visita;
-    SET NEW.`nro_visita` = @cantRegistros;
 END
 //
 
