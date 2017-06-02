@@ -1,3 +1,5 @@
+USE ChildrenCity;
+
 SET SQL_SAFE_UPDATES = 0;
 
 delete from a_cargo;
