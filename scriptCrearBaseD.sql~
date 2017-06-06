@@ -121,16 +121,11 @@ CREATE TABLE `Episodio_Salud`(
      CONSTRAINT `histc` FOREIGN KEY (`nro_hist`) REFERENCES `Historia_Clinica`(`nro_hist`) ON DELETE CASCADE ON UPDATE CASCADE
 )ENGINE InnoDB;
 
-DROP TABLE IF EXISTS `Fecha`;
-CREATE TABLE `Fecha`(
-    `fecha` DATE
-)ENGINE InnoDB;
-
 DROP TABLE IF EXISTS `Ocurre`;
 CREATE TABLE `Ocurre`(
     `nro_casa` INTEGER NOT NULL,
     `nro_doc` INTEGER NOT NULL,
-    `tipo_doc` VARCHAR(10) NOT NULL,
+    `tipo_doc` VARCHAR(10),
     `fecha` DATE,
     `hora_inicio` TIME,
     `hora_fin` TIME,
