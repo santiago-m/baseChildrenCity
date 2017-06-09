@@ -35,7 +35,7 @@ CREATE TABLE `Menor` (
     `edad` INT,
     `peso` INT,
     `talla` VARCHAR(2),
-    `telefono` BIGINT,
+    `telefono` VARCHAR(15),
     `nro_casa` INTEGER,
 	`nro_legajo` INTEGER,
 	`nro_hist` INTEGER NOT NULL,
@@ -135,8 +135,31 @@ CREATE TABLE `Receta`(
     CONSTRAINT `rec2` FOREIGN KEY (`nro_medicamento`) REFERENCES `Medicamento`(`nro_medicamento`) ON DELETE CASCADE ON UPDATE CASCADE
 )ENGINE InnoDB;
 
+DROP TABLE IF EXISTS `Audit`;
+CREATE TABLE `Audit`(
+	 `old_estado` ENUM ('ingresado', 'egresado'),
+     `old_condicion` ENUM ('dia','permanente'),
+     `old_peso` INT,
+     `old_talla` VARCHAR(2),
+     `old_telefono` VARCHAR(15),
+     `old_nro_casa` INTEGER,
+     `new_estado` ENUM ('ingresado', 'egresado'),
+     `new_condicion` ENUM ('dia','permanente'),
+     `new_peso` INT,
+     `new_talla` VARCHAR(2),
+     `new_telefono` VARCHAR(15),
+     `new_casa` INTEGER,
+     `tbl_name` VARCHAR(100)	
+)ENGINE InnoDB;
 
 DELIMITER //
+/*CREATE TRIGGER auditTrigger BEFORE UPDATE ON `Menor`
+  FOR EACH ROW 
+  BEGIN
+    INSERT INTO Audit(`old_estado`, `old_condicion`, `old_peso`, `old_talla`, `old_telefono`, `old_nro_casa`, `new_estado`, `new_condicion`, `new_peso`, `new_talla`, `new_telefono`, `new_nro_casa`, `tbl_name`)
+    	VALUES (OLD.`estado`, OLD.`condicion`, OLD.`peso`, D.`talla`, OLD.`telefono`, OLD.`nro_casa`, NEW.`estado`, NEW.`condicion`, NEW.`peso`, NEW.`talla`, NEW.`telefono`, NEW.`nro_casa`, "Menor");
+  END
+//*/
 
 CREATE TRIGGER trig_edad BEFORE INSERT ON `Menor`
 FOR EACH ROW
@@ -149,6 +172,8 @@ CREATE TRIGGER trig_edadUpd8 BEFORE UPDATE ON `Menor`
 FOR EACH ROW
 BEGIN
     SET NEW.`edad` = `edad`(NEW.`fecha_nac`, curdate());
+    INSERT INTO Audit(`old_estado`, `old_condicion`, `old_peso`, `old_talla`, `old_telefono`, `old_nro_casa`, `new_estado`, `new_condicion`, `new_peso`, `new_talla`, `new_telefono`, `new_nro_casa`, `tbl_name`)
+    	VALUES (OLD.`estado`, OLD.`condicion`, OLD.`peso`, D.`talla`, OLD.`telefono`, OLD.`nro_casa`, NEW.`estado`, NEW.`condicion`, NEW.`peso`, NEW.`talla`, NEW.`telefono`, NEW.`nro_casa`, "Menor");
 END
 //
 
@@ -160,7 +185,6 @@ CREATE FUNCTION `edad` (
   `pdate_end` DATE
 ) RETURNS INT(11) UNSIGNED   
 COMMENT 'Calcula la edad dadas dos fechas'
-DETERMINISTIC NO SQL SQL SECURITY DEFINER
 RETURN floor(TIMESTAMPDIFF(YEAR, pdate_begin, pdate_end));
 
 
