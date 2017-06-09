@@ -168,7 +168,7 @@ BEGIN
 END
 //
 
-CREATE TRIGGER trig_edadUpd8 BEFORE UPDATE ON `Menor`
+CREATE TRIGGER trig_updateMenor BEFORE UPDATE ON `Menor`
 FOR EACH ROW
 BEGIN
     SET NEW.`edad` = `edad`(NEW.`fecha_nac`, curdate());
