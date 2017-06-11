@@ -121,11 +121,6 @@ CREATE TABLE `Episodio_Salud`(
      CONSTRAINT `histc` FOREIGN KEY (`nro_hist`) REFERENCES `Historia_Clinica`(`nro_hist`) ON DELETE CASCADE ON UPDATE CASCADE
 )ENGINE InnoDB;
 
-DROP TABLE IF EXISTS `Fecha`;
-CREATE TABLE `Fecha`(
-    `fecha` DATE
-)ENGINE InnoDB;
-
 DROP TABLE IF EXISTS `Ocurre`;
 CREATE TABLE `Ocurre`(
     `nro_casa` INTEGER NOT NULL,
@@ -135,8 +130,7 @@ CREATE TABLE `Ocurre`(
     `hora_inicio` TIME,
     `hora_fin` TIME,
     PRIMARY KEY(`nro_casa`,`nro_doc`,`tipo_doc`,`fecha`),
-    CONSTRAINT `agregacion` FOREIGN KEY (`nro_casa`,`nro_doc`,`tipo_doc`) REFERENCES `a_cargo`(`nro_casa`,`nro_doc`,`tipo_doc`)) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `f` FOREIGN KEY (`fecha`) REFERENCES `Fecha`(`fecha`) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT `agregacion` FOREIGN KEY (`nro_casa`,`nro_doc`,`tipo_doc`) REFERENCES `a_cargo`(`nro_casa`,`nro_doc`,`tipo_doc`) ON DELETE CASCADE ON UPDATE CASCADE
 )ENGINE InnoDB;
 
 DROP TABLE IF EXISTS `Medicamento`;
@@ -157,6 +151,24 @@ CREATE TABLE `Receta`(
 )ENGINE InnoDB;
 
 
+DROP TABLE IF EXISTS `Audit`;
+CREATE TABLE `Audit`(
+     `old_estado` ENUM ('ingresado', 'egresado'),
+     `old_condicion` ENUM ('dia','permanente'),
+     `old_peso` INT,
+     `old_talla` VARCHAR(2),
+     `old_telefono` VARCHAR(15),
+     `old_nro_casa` INTEGER,
+     `new_estado` ENUM ('ingresado', 'egresado'),
+     `new_condicion` ENUM ('dia','permanente'),
+     `new_peso` INT,
+     `new_talla` VARCHAR(2),
+     `new_telefono` VARCHAR(15),
+     `new_casa` INTEGER,
+     `tbl_name` VARCHAR(100)    
+)ENGINE InnoDB;
+
+
 DELIMITER //
 
 CREATE TRIGGER trig_edad BEFORE INSERT ON `Menor`
@@ -166,10 +178,12 @@ BEGIN
 END
 //
 
-CREATE TRIGGER trig_edadUpd8 BEFORE UPDATE ON `Menor`
+CREATE TRIGGER trig_updateMenor BEFORE UPDATE ON `Menor`
 FOR EACH ROW
 BEGIN
     SET NEW.`edad` = `edad`(NEW.`fecha_nac`, curdate());
+    INSERT INTO Audit(`old_estado`, `old_condicion`, `old_peso`, `old_talla`, `old_telefono`, `old_nro_casa`, `new_estado`, `new_condicion`, `new_peso`, `new_talla`, `new_telefono`, `new_nro_casa`, `tbl_name`)
+        VALUES (OLD.`estado`, OLD.`condicion`, OLD.`peso`, D.`talla`, OLD.`telefono`, OLD.`nro_casa`, NEW.`estado`, NEW.`condicion`, NEW.`peso`, NEW.`talla`, NEW.`telefono`, NEW.`nro_casa`, "Menor");
 END
 //
 
