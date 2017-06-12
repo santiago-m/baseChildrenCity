@@ -6,6 +6,7 @@
 import java.sql.*;
 import java.util.Scanner;
 import java.util.Locale;
+import java.time.LocalDate;
 
 /**
  * <p>Title: </p>
@@ -190,7 +191,7 @@ public class DBAdministrator {
     	}
 
     	System.out.print("Ingrese Fecha de nacimiento del menor en formato AAAA-MM-DD: ");
-    	String date = readString();
+    	String birthDate = readString();
 
     	System.out.print("Ingrese el peso del menor: ");
     	String numInString = readString();
@@ -230,7 +231,7 @@ public class DBAdministrator {
     	System.out.println("--------------------Datos ingresados--------------");
     	System.out.println("Nombre y apellido: "+name+" "+lastName);
     	System.out.println("Documento: "+dniType+" "+dni);
-    	System.out.println("Fecha de nacimiento: "+date);
+    	System.out.println("Fecha de nacimiento: "+birthDate);
     	System.out.println("Telefono: "+phone);
     	System.out.println("Estado: "+estado);
     	System.out.println("Condicion: "+condicion);
@@ -242,6 +243,19 @@ public class DBAdministrator {
     	System.out.println("Confirmar? Si/No");
     	if ( (readString()).toLowerCase().equals("si") )  {
       		try {
+            clearScreen();
+            System.out.print("El menor ha ingresado hoy? si/no -Si selecciona no debera escribir la fecha de ingreso.- ");
+            String date = readString();
+
+            if (date.toLowerCase().equals("si")) {
+              date = LocalDate.now().toString();
+            }
+            else {
+              System.out.println("Escriba la fecha en que ingreso el menor en formato AAAA-MM-DD: ");
+              date = readString();
+            }
+            clearScreen();
+
         		String driver = "org.gjt.mm.mysql.Driver";
         		String url = "jdbc:mysql://localhost:3306/ChildrenCity";
         		String username = "root";
@@ -279,7 +293,7 @@ public class DBAdministrator {
     	       		nro_historiaClinica = cantHistoriaClinica.getInt(1);
         	   	}
             
-        		String menorInserter = "INSERT INTO `Menor` (`nro_doc`, `tipo_doc`, `apellido`, `nombre`, `estado`, `condicion`, `fecha_nac`, `peso`, `talla`, `telefono`, `nro_casa`, `nro_legajo`, `nro_hist`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        		String menorInserter = "INSERT INTO `Menor` (`nro_doc`, `tipo_doc`, `apellido`, `nombre`, `estado`, `condicion`, `fecha_nac`, `peso`, `talla`, `telefono`, `nro_casa`, `nro_legajo`, `nro_hist`, `fecha_ingreso`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
           		statement = connection.prepareStatement(menorInserter);
           		statement.setInt(1, dni);
@@ -288,13 +302,14 @@ public class DBAdministrator {
           		statement.setString(4, name);
           		statement.setString(5, estado);
           		statement.setString(6, condicion);
-          		statement.setString(7, date);
+          		statement.setString(7, birthDate);
           		statement.setFloat(8, peso);
           		statement.setString(9, talla);
           		statement.setString(10, phone);
           		statement.setInt(11, nro_casa);
           		statement.setInt(12, nro_legajo);
           		statement.setInt(13, nro_historiaClinica);
+              statement.setString(14, date);
 
           		statement.executeUpdate();
         		connection.commit();
