@@ -1,0 +1,9 @@
+    Con la terminal abierta en el directorio:
+
+Metodo 1:
+        1) javac DBAdministrator.java
+        2) java -classpath ".:mysql-connector-java-5.0.8-bin.jar" DBAdministrator
+Metodo 2:
+        1) chmod +x ./compilarYEjecutar.sh -Solo se realiza la primera vez-
+        2) ./compilarYEjecutar.sh
+
