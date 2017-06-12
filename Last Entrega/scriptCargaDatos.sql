@@ -21,12 +21,12 @@ INSERT INTO `Legajo` (`nro_legajo`, `visita_familiar`, `foto_dni`, `part_nac`, `
 	(103, 1, 'http://imagenes.com/dniJose', 'http://imagenes.com/part_nacJose', 'http://imagenes.com/listadoHogaresJose'),
 	(104, 0, 'http://imagenes.com/dniPaula', 'http://imagenes.com/part_nacPaula', 'http://imagenes.com/listadoHogaresPaula');
 
-INSERT INTO `Menor` (`nro_doc`, `tipo_doc`, `apellido`, `nombre`, `estado`, `condicion`, `fecha_nac`, `peso`, `talla`, `telefono`, `nro_casa`, `nro_legajo`, `nro_hist`) VALUES
-	(50417693, 'DNI', 'Grosso', 'Jose', 'ingresado', 'permanente', '2005-07-13', 50, 'S', "3584555443", 7, 102, 1),
-	(58217553, 'DNI', 'Rodriguez', 'Rogelio', 'ingresado', 'dia', '2006-08-08', 45, 'XS', "3586212534", 5, 104, 2),
-	(53877633, 'DNI', 'Tobaldo', 'Roberto', 'egresado', 'dia', '2008-10-20', 53, 'M', "3585563412", 4, 101, 3),
-	(45439524, 'DNI', 'Gimenez', 'Francisco', 'egresado', 'permanente', '2005-03-21', 60, 'L', "3584887324", 7, 100, 4),
-	(60222510, 'DNI', 'Menendez', 'Paula', 'ingresado', 'dia', '2000-01-11', 61, 'L', "3584223652", 2, 103, 5);
+INSERT INTO `Menor` (`nro_doc`, `tipo_doc`, `apellido`, `nombre`, `estado`, `condicion`, `fecha_nac`, `peso`, `talla`, `telefono`, `nro_casa`, `nro_legajo`, `nro_hist`, `fecha_ingreso`) VALUES
+	(50417693, 'DNI', 'Grosso', 'Jose', 'ingresado', 'permanente', '2005-07-13', 50, 'S', "3584555443", 7, 102, 1, (select curdate())),
+	(58217553, 'DNI', 'Rodriguez', 'Rogelio', 'ingresado', 'dia', '2006-08-08', 45, 'XS', "3586212534", 5, 104, 2, (select curdate())),
+	(53877633, 'DNI', 'Tobaldo', 'Roberto', 'egresado', 'dia', '2008-10-20', 53, 'M', "3585563412", 4, 101, 3, (select curdate())),
+	(45439524, 'DNI', 'Gimenez', 'Francisco', 'egresado', 'permanente', '2005-03-21', 60, 'L', "3584887324", 7, 100, 4, (select curdate())),
+	(60222510, 'DNI', 'Menendez', 'Paula', 'ingresado', 'dia', '2000-01-11', 61, 'L', "3584223652", 2, 103, 5, (select curdate()));
  
  INSERT INTO `Visitante` (`nro_doc`, `tipo_doc`, `apellido`, `nombre`) VALUES 
  	(34213567,'DNI','Fenoglio','Marcelo'),

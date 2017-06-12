@@ -39,6 +39,7 @@ CREATE TABLE `Menor` (
     `nro_casa` INTEGER,
 	`nro_legajo` INTEGER,
 	`nro_hist` INTEGER NOT NULL,
+    `fecha_ingreso` DATE,
     PRIMARY KEY(`nro_doc`,`tipo_doc`),
     CONSTRAINT `casaMenor` FOREIGN KEY (`nro_casa`) REFERENCES `Casa`(`nro_casa`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `leg` FOREIGN KEY (`nro_legajo`) REFERENCES `Legajo`(`nro_legajo`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -165,6 +166,8 @@ CREATE TABLE `Audit`(
      `new_talla` VARCHAR(2),
      `new_telefono` VARCHAR(15),
      `new_nro_casa` INTEGER,
+     `fecha_modificacion` DATE,
+     `usuario` VARCHAR(10),
      `tbl_name` VARCHAR(100)    
 )ENGINE InnoDB;
 
@@ -182,8 +185,8 @@ CREATE TRIGGER trig_updateMenor BEFORE UPDATE ON `Menor`
 FOR EACH ROW
 BEGIN
     SET NEW.`edad` = `edad`(NEW.`fecha_nac`, curdate());
-    INSERT INTO Audit(`old_estado`, `old_condicion`, `old_peso`, `old_talla`, `old_telefono`, `old_nro_casa`, `new_estado`, `new_condicion`, `new_peso`, `new_talla`, `new_telefono`, `new_nro_casa`, `tbl_name`)
-        VALUES (OLD.`estado`, OLD.`condicion`, OLD.`peso`, OLD.`talla`, OLD.`telefono`, OLD.`nro_casa`, NEW.`estado`, NEW.`condicion`, NEW.`peso`, NEW.`talla`, NEW.`telefono`, NEW.`nro_casa`, "Menor");
+    INSERT INTO Audit(`old_estado`, `old_condicion`, `old_peso`, `old_talla`, `old_telefono`, `old_nro_casa`, `new_estado`, `new_condicion`, `new_peso`, `new_talla`, `new_telefono`, `new_nro_casa`, `fecha_modificacion`, `usuario`, `tbl_name`)
+        VALUES (OLD.`estado`, OLD.`condicion`, OLD.`peso`, OLD.`talla`, OLD.`telefono`, OLD.`nro_casa`, NEW.`estado`, NEW.`condicion`, NEW.`peso`, NEW.`talla`, NEW.`telefono`, NEW.`nro_casa`, curdate(), current_user(), "Menor");
 END
 //
 
