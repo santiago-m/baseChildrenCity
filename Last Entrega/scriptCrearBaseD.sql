@@ -198,7 +198,6 @@ CREATE FUNCTION `edad` (
   `pdate_end` DATE
 ) RETURNS INT(11) UNSIGNED   
 COMMENT 'Calcula la edad dadas dos fechas'
-DETERMINISTIC NO SQL SQL SECURITY DEFINER
 RETURN floor(TIMESTAMPDIFF(YEAR, pdate_begin, pdate_end));
 
 
