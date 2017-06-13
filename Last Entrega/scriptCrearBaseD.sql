@@ -26,7 +26,7 @@ CREATE TABLE `Historia_Clinica`(
 DROP TABLE IF EXISTS `Menor`;
 CREATE TABLE `Menor` (
     `nro_doc` INTEGER NOT NULL,
-	`tipo_doc` VARCHAR(10) NOT NULL,
+    `tipo_doc` VARCHAR(10) NOT NULL,
     `apellido` VARCHAR(10),
     `nombre` VARCHAR(10),
     `estado` ENUM ('ingresado', 'egresado'),
@@ -154,6 +154,10 @@ CREATE TABLE `Receta`(
 
 DROP TABLE IF EXISTS `Audit`;
 CREATE TABLE `Audit`(
+     `doc_menor` INTEGER NOT NULL,
+     `tipo_doc` VARCHAR(10) NOT NULL,
+     `apellido_menor` VARCHAR(10),
+     `nombre_menor` VARCHAR(10),
      `old_estado` ENUM ('ingresado', 'egresado'),
      `old_condicion` ENUM ('dia','permanente'),
      `old_peso` INT,
@@ -185,8 +189,8 @@ CREATE TRIGGER trig_updateMenor BEFORE UPDATE ON `Menor`
 FOR EACH ROW
 BEGIN
     SET NEW.`edad` = `edad`(NEW.`fecha_nac`, curdate());
-    INSERT INTO Audit(`old_estado`, `old_condicion`, `old_peso`, `old_talla`, `old_telefono`, `old_nro_casa`, `new_estado`, `new_condicion`, `new_peso`, `new_talla`, `new_telefono`, `new_nro_casa`, `fecha_modificacion`, `usuario`, `tbl_name`)
-        VALUES (OLD.`estado`, OLD.`condicion`, OLD.`peso`, OLD.`talla`, OLD.`telefono`, OLD.`nro_casa`, NEW.`estado`, NEW.`condicion`, NEW.`peso`, NEW.`talla`, NEW.`telefono`, NEW.`nro_casa`, curdate(), current_user(), "Menor");
+    INSERT INTO Audit(`doc_menor`, `tipo_doc`, `apellido_menor`, `nombre_menor`, `old_estado`, `old_condicion`, `old_peso`, `old_talla`, `old_telefono`, `old_nro_casa`, `new_estado`, `new_condicion`, `new_peso`, `new_talla`, `new_telefono`, `new_nro_casa`, `fecha_modificacion`, `usuario`, `tbl_name`)
+        VALUES (NEW.`nro_doc`, NEW.`tipo_doc`, `apellido`, `nombre`, OLD.`estado`, OLD.`condicion`, OLD.`peso`, OLD.`talla`, OLD.`telefono`, OLD.`nro_casa`, NEW.`estado`, NEW.`condicion`, NEW.`peso`, NEW.`talla`, NEW.`telefono`, NEW.`nro_casa`, curdate(), current_user(), "Menor");
 END
 //
 
