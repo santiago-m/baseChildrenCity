@@ -82,14 +82,14 @@ public class DBAdministrator {
         	String url = "jdbc:mysql://localhost:3306/ChildrenCity";
         	String username = "root";
         	String password = "root";
-	
+
 	        // Load database driver if not already loaded.
 	        Class.forName(driver);
 	        // Establish network connection to database.
 	        Connection connection = DriverManager.getConnection(url, username, password);
-	
-	        connection.setAutoCommit(false); 
-	
+
+	        connection.setAutoCommit(false);
+
 	        String personalDelete = "DELETE FROM Personal where nro_doc=?;";
 	        PreparedStatement statement = connection.prepareStatement(personalDelete);
 	        statement.setString(1, String.valueOf(dni));
@@ -106,7 +106,7 @@ public class DBAdministrator {
         	sqle.printStackTrace();
         	System.err.println("Error connecting: " + sqle);
         	readString();
-      	} 		
+      	}
 	}
 
   	public static void listVisitas(int dni) {
@@ -116,19 +116,19 @@ public class DBAdministrator {
         	String url = "jdbc:mysql://localhost:3306/ChildrenCity";
         	String username = "root";
         	String password = "root";
-	
+
 	        // Load database driver if not already loaded.
 	        Class.forName(driver);
 	        // Establish network connection to database.
 	        Connection connection = DriverManager.getConnection(url, username, password);
-	
-	        connection.setAutoCommit(false); 
-	
+
+	        connection.setAutoCommit(false);
+
 	        String verVisitas = "SELECT * FROM Visita where nro_doc_menor = ?;";
 	        PreparedStatement statement = connection.prepareStatement(verVisitas);
 	        statement.setString(1, String.valueOf(dni));
 	        ResultSet resultSet = statement.executeQuery();
-        	//connection.commit();	
+        	//connection.commit();
 
 	        if (!resultSet.isBeforeFirst()) {
 	        	System.out.println("Este menor no ha sido visitado aun.");
@@ -138,14 +138,16 @@ public class DBAdministrator {
      		while(resultSet.next()) {
         	// Quarter
 
-        		System.out.print(" Nro visita: " + resultSet.getString(1));
-        		System.out.print("; DNI Menor: " + resultSet.getString(2));
-        		System.out.print("; DNI_Visitante: " + resultSet.getString(3));
-        		System.out.print(" Fecha de Visita: " + resultSet.getString(4));
-        		System.out.print(" Hora Llegada: " + resultSet.getString(5));
-        		System.out.print(" Hora Salida: " + resultSet.getString(6));
-            	System.out.print("\n   ");
-				System.out.print("\n   ");
+        		System.out.print(" Nro visita: " + resultSet.getString(1) + " ///");
+        		System.out.print("Documento Menor: " + resultSet.getString(2));
+      		  System.out.print("; Tipo doc. Menor: " + resultSet.getString(3));
+        		System.out.print("; Documento Visitante: " + resultSet.getString(4));
+            System.out.print("; Tipo doc. Visitante: " + resultSet.getString(5));
+        		System.out.print(" Fecha de Visita: " + resultSet.getString(6));
+        		System.out.print(" Hora Llegada: " + resultSet.getString(7));
+        		System.out.print(" Hora Salida: " + resultSet.getString(8));
+            System.out.print("\n");
+				System.out.print("\n");
    			}
 
 
@@ -171,7 +173,7 @@ public class DBAdministrator {
     	int dni = readInt();
 
     	System.out.print("Ingrese el nombre del menor: ");
-    	String name = readString();    
+    	String name = readString();
 
     	System.out.print("Ingrese el apellido del menor: ");
     	String lastName = readString();
@@ -223,7 +225,7 @@ public class DBAdministrator {
     	String url_dni = readString();
 
     	System.out.print("Ingrese la direccion de la partida de nacimiento del menor: ");
-    	String url_partida = readString();    
+    	String url_partida = readString();
 
     	System.out.print("Ingrese la direccion de los informes de otros hogares del menor: ");
     	String url_otherHogares = readString();
@@ -260,13 +262,13 @@ public class DBAdministrator {
         		String url = "jdbc:mysql://localhost:3306/ChildrenCity";
         		String username = "root";
         		String password = "root";
-	
+
 	        	// Load database driver if not already loaded.
 	        	Class.forName(driver);
         		// Establish network connection to database.
         		Connection connection = DriverManager.getConnection(url, username, password);
 
-        		connection.setAutoCommit(false); 
+        		connection.setAutoCommit(false);
 
         		String useDBQuery = "use ChildrenCity";
         		String insertLegajo = "INSERT INTO `Legajo` (`nro_legajo`, `visita_familiar`, `foto_dni`, `part_nac`, `otros_hogares`) values (?, ?, ?, ?, ?)";
@@ -292,7 +294,7 @@ public class DBAdministrator {
 	            while(cantHistoriaClinica.next()) {
     	       		nro_historiaClinica = cantHistoriaClinica.getInt(1);
         	   	}
-            
+
         		String menorInserter = "INSERT INTO `Menor` (`nro_doc`, `tipo_doc`, `apellido`, `nombre`, `estado`, `condicion`, `fecha_nac`, `peso`, `talla`, `telefono`, `nro_casa`, `nro_legajo`, `nro_hist`, `fecha_ingreso`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
           		statement = connection.prepareStatement(menorInserter);
@@ -316,7 +318,7 @@ public class DBAdministrator {
 
         		System.out.println("Menor agregado exitosamente a la base de datos.");
         		readString();
-     
+
       		} catch(ClassNotFoundException cnfe) {
     	    	System.err.println("Error loading driver: " + cnfe);
     	    	readString();
