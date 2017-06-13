@@ -167,7 +167,7 @@ CREATE TABLE `Audit`(
      `new_telefono` VARCHAR(15),
      `new_nro_casa` INTEGER,
      `fecha_modificacion` DATE,
-     `usuario` VARCHAR(10),
+     `usuario` VARCHAR(25),
      `tbl_name` VARCHAR(100)    
 )ENGINE InnoDB;
 
