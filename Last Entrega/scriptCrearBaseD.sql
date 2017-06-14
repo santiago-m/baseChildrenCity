@@ -154,8 +154,8 @@ CREATE TABLE `Receta`(
 
 DROP TABLE IF EXISTS `Audit`;
 CREATE TABLE `Audit`(
-     `doc_menor` INTEGER NOT NULL,
-     `tipo_doc` VARCHAR(10) NOT NULL,
+    `nro_doc_menor` INTEGER NOT NULL,
+     `tipo_doc_menor` VARCHAR(10) NOT NULL,
      `apellido_menor` VARCHAR(10),
      `nombre_menor` VARCHAR(10),
      `old_estado` ENUM ('ingresado', 'egresado'),
@@ -172,7 +172,9 @@ CREATE TABLE `Audit`(
      `new_nro_casa` INTEGER,
      `fecha_modificacion` DATE,
      `usuario` VARCHAR(25),
-     `tbl_name` VARCHAR(100)    
+     `tbl_name` VARCHAR(100),
+     PRIMARY KEY (`nro_doc_menor`, `tipo_doc_menor`),
+     CONSTRAINT `FK_menor` FOREIGN KEY (`nro_doc_menor`, `tipo_doc_menor`) REFERENCES `Menor`(`nro_doc`,`tipo_doc`)
 )ENGINE InnoDB;
 
 
@@ -189,19 +191,17 @@ CREATE TRIGGER trig_updateMenor BEFORE UPDATE ON `Menor`
 FOR EACH ROW
 BEGIN
     SET NEW.`edad` = `edad`(NEW.`fecha_nac`, curdate());
-    INSERT INTO Audit(`doc_menor`, `tipo_doc`, `apellido_menor`, `nombre_menor`, `old_estado`, `old_condicion`, `old_peso`, `old_talla`, `old_telefono`, `old_nro_casa`, `new_estado`, `new_condicion`, `new_peso`, `new_talla`, `new_telefono`, `new_nro_casa`, `fecha_modificacion`, `usuario`, `tbl_name`)
-        VALUES (NEW.`nro_doc`, NEW.`tipo_doc`, `apellido`, `nombre`, OLD.`estado`, OLD.`condicion`, OLD.`peso`, OLD.`talla`, OLD.`telefono`, OLD.`nro_casa`, NEW.`estado`, NEW.`condicion`, NEW.`peso`, NEW.`talla`, NEW.`telefono`, NEW.`nro_casa`, curdate(), current_user(), "Menor");
+    INSERT INTO Audit(`nro_doc_menor`,`tipo_doc_menor`,`apellido_menor`, `nombre_menor`, `old_estado`, `old_condicion`, `old_peso`, `old_talla`, `old_telefono`, `old_nro_casa`, `new_estado`, `new_condicion`, `new_peso`, `new_talla`, `new_telefono`, `new_nro_casa`, `fecha_modificacion`, `usuario`, `tbl_name`)
+        VALUES (OLD.`nro_doc`,OLD.`tipo_doc`,OLD.`apellido`,OLD.`nombre`, OLD.`estado`, OLD.`condicion`, OLD.`peso`, OLD.`talla`, OLD.`telefono`, OLD.`nro_casa`, NEW.`estado`, NEW.`condicion`, NEW.`peso`, NEW.`talla`, NEW.`telefono`, NEW.`nro_casa`, curdate(), current_user(), "Menor");
 END
 //
 
 DELIMITER ;
 
-DROP FUNCTION IF EXISTS `edad`; 
+DROP FUNCTION IF EXISTS `edad`;
 CREATE FUNCTION `edad` (
   `pdate_begin` DATE,
   `pdate_end` DATE
-) RETURNS INT(11) UNSIGNED   
+) RETURNS INT(11) UNSIGNED
 COMMENT 'Calcula la edad dadas dos fechas'
 RETURN floor(TIMESTAMPDIFF(YEAR, pdate_begin, pdate_end));
-
-
